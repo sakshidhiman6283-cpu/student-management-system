@@ -1,0 +1,113 @@
+import csv
+import os
+
+FILE-NAME = "students.csv"
+
+#  file if it doesn,t exist 
+if not os.path.exists(FILE-NAME): 
+    with open(FILE-NAME, "W" , newline="") as file: 
+        writer = csv.writer(file)
+"        writer.writerow("ROLL NO", "NAME , "BRANCH", "SEMSESTER", "MARKS"])
+
+def add-student():
+roll = input("ENTER ROLL NO:")
+name = input("ENTER NAME: ")
+branch = input(" Enter semsester: ")
+MARKS = INPUT("Enter Marks: ")
+
+with open(FILE-NAME,"a",newline="") as file:
+    writer = csv.writer(file)
+    writer.writerow([roll,name,branch,semester,marks])
+
+    print("Student added successfully!")
+
+    def view-students():
+    with open(FILE-NAME,"r") as file:
+        reader = csv.reader(file)
+        for row in reader:
+            print(row)
+
+            def search-student():
+            with open(FILE-NAME,"r") as file:
+                reader = csv.reader(file)
+                for row in reader:
+                    print(row)
+
+                    def search-student():
+                    roll = input("Enter Roll no to search: ")
+                    
+                    with open(FILE-NAME, "r") as file:
+                        reader = csv.reader(file)
+                        found = False
+
+                        for row in reader: 
+                            if len(row) > 0 and row[0] ==roll:
+                                print("student Found:")
+                                print(row)
+                                found = True
+                                break
+
+                            if not found:
+                                print("Student not found!")
+
+                                def update-student():
+                                roll = input("Enter Roll No to update: ")
+                                rows = []
+
+with open(FILE-NAME, "r") as file:
+    reader = csv.reader(file)
+
+    for row in reader(file)
+
+    for row in reader:
+        if len(row) > 0 and row[0] == roll:
+            print("Enter New Details")
+            name = input("Enter New Details")
+            name = input("Name: ")
+            branch = input("Branch: ")
+            semester = input("Semester: ")
+            marks = input("Marks: ")
+            rows.append(row)
+
+            with open(FILE-NAME, "w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerows(rows)
+
+                print("Student updated successfully!")
+
+                def delete-student():
+                roll = input(Enter roll no to delete: ")
+                             rows = []
+
+                             with open(FILE-NAME,"r") as file:\
+                            reader = csv.reader(file)
+
+                            for row in reader:
+                            if len(row) > 0 and row[0] != roll:
+                            rows.append(rows)
+
+                            print("Student deleted successfully!")
+
+                            while True:
+                            print("1. Add student")
+                            print("2. View students")
+                            print("3. Search student")
+                            print("4. Upadate student")
+                            print("5. Delete student")
+                            print("6. Exit")
+
+                            choice = input(Enter your choice: ")
+                                           
+                                           if choice =="1":
+                                           add-student()
+                                           elif choice == "2":
+                                           view-student()
+                                           elif choice == "3":
+                                           search-student()
+                                           elif choice == "6":
+                                           print("Thank you!")
+                                           break
+                                           else:
+                                           print(Invaild choice!")
+                                                 
+
