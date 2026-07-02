@@ -1,0 +1,138 @@
+import sqlite3
+
+# Database Connection
+conn = sqlite3.connect("hospital.db")
+cursor = conn.cursor()
+
+# Create Table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS patients (
+    patient_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    age INTEGER,
+    gender TEXT,
+    disease TEXT,
+    doctor TEXT,
+    phone TEXT
+)
+""")
+conn.commit()
+
+# Add Patient
+def add_patient():
+    name = input("Enter Patient Name: ")
+    age = int(input("Enter Age: "))
+    gender = input("Enter Gender: ")
+    disease = input("Enter Disease: ")
+    doctor = input("Enter Doctor Name: ")
+    phone = input("Enter Phone Number: ")
+
+    cursor.execute("""
+    INSERT INTO patients(name, age, gender, disease, doctor, phone)
+    VALUES (?, ?, ?, ?, ?, ?)
+    """, (name, age, gender, disease, doctor, phone))
+
+    conn.commit()
+    print("Patient Added Successfully!")
+
+# View Patients
+def view_patients():
+    cursor.execute("SELECT * FROM patients")
+    records = cursor.fetchall()
+
+    print("\n===== Patient Records =====")
+    for row in records:
+        print(f"""
+Patient ID : {row[0]}
+Name       : {row[1]}
+Age        : {row[2]}
+Gender     : {row[3]}
+Disease    : {row[4]}
+Doctor     : {row[5]}
+Phone      : {row[6]}
+-------------------------------
+""")
+
+# Search Patient
+def search_patient():
+    pid = int(input("Enter Patient ID: "))
+
+    cursor.execute("SELECT * FROM patients WHERE patient_id=?", (pid,))
+    record = cursor.fetchone()
+
+    if record:
+        print(record)
+    else:
+        print("Patient Not Found!")
+
+# Update Patient
+def update_patient():
+    pid = int(input("Enter Patient ID: "))
+    disease = input("Enter New Disease: ")
+    doctor = input("Enter New Doctor: ")
+
+    cursor.execute("""
+    UPDATE patients
+    SET disease=?, doctor=?
+    WHERE patient_id=?
+    """, (disease, doctor, pid))
+
+    conn.commit()
+
+    if cursor.rowcount > 0:
+        print("Patient Record Updated Successfully!")
+    else:
+        print("Patient Not Found!")
+
+# Delete Patient
+def delete_patient():
+    pid = int(input("Enter Patient ID: "))
+
+    cursor.execute("DELETE FROM patients WHERE patient_id=?", (pid,))
+    conn.commit()
+
+    if cursor.rowcount > 0:
+        print("Patient Deleted Successfully!")
+    else:
+        print("Patient Not Found!")
+
+# Main Menu
+while True:
+    print("""
+======== Hospital Management System ========
+
+1. Add Patient
+2. View Patients
+3. Search Patient
+4. Update Patient
+5. Delete Patient
+6. Exit
+
+============================================
+""")
+
+    choice = input("Enter Your Choice: ")
+
+    if choice == "1":
+        add_patient()
+
+    elif choice == "2":
+        view_patients()
+
+    elif choice == "3":
+        search_patient()
+
+    elif choice == "4":
+        update_patient()
+
+    elif choice == "5":
+        delete_patient()
+
+    elif choice == "6":
+        print("Thank You!")
+        break
+
+    else:
+        print("Invalid Choice!")
+
+conn.close()
