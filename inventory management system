@@ -1,0 +1,135 @@
+import sqlite3
+
+# Database Connection
+conn = sqlite3.connect("inventory.db")
+cursor = conn.cursor()
+
+# Create Table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS products (
+    product_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    product_name TEXT NOT NULL,
+    category TEXT,
+    quantity INTEGER,
+    price REAL,
+    supplier TEXT
+)
+""")
+conn.commit()
+
+# Add Product
+def add_product():
+    name = input("Enter Product Name: ")
+    category = input("Enter Category: ")
+    quantity = int(input("Enter Quantity: "))
+    price = float(input("Enter Price: "))
+    supplier = input("Enter Supplier Name: ")
+
+    cursor.execute("""
+    INSERT INTO products(product_name, category, quantity, price, supplier)
+    VALUES (?, ?, ?, ?, ?)
+    """, (name, category, quantity, price, supplier))
+
+    conn.commit()
+    print("Product Added Successfully!")
+
+# View Products
+def view_products():
+    cursor.execute("SELECT * FROM products")
+    records = cursor.fetchall()
+
+    print("\n========== Product List ==========")
+    for row in records:
+        print(f"""
+Product ID   : {row[0]}
+Product Name : {row[1]}
+Category     : {row[2]}
+Quantity     : {row[3]}
+Price        : ₹{row[4]}
+Supplier     : {row[5]}
+--------------------------------------
+""")
+
+# Search Product
+def search_product():
+    pid = int(input("Enter Product ID: "))
+
+    cursor.execute("SELECT * FROM products WHERE product_id=?", (pid,))
+    record = cursor.fetchone()
+
+    if record:
+        print(record)
+    else:
+        print("Product Not Found!")
+
+# Update Product
+def update_product():
+    pid = int(input("Enter Product ID: "))
+    quantity = int(input("Enter New Quantity: "))
+    price = float(input("Enter New Price: "))
+
+    cursor.execute("""
+    UPDATE products
+    SET quantity=?, price=?
+    WHERE product_id=?
+    """, (quantity, price, pid))
+
+    conn.commit()
+
+    if cursor.rowcount > 0:
+        print("Product Updated Successfully!")
+    else:
+        print("Product Not Found!")
+
+# Delete Product
+def delete_product():
+    pid = int(input("Enter Product ID: "))
+
+    cursor.execute("DELETE FROM products WHERE product_id=?", (pid,))
+    conn.commit()
+
+    if cursor.rowcount > 0:
+        print("Product Deleted Successfully!")
+    else:
+        print("Product Not Found!")
+
+# Main Menu
+while True:
+    print("""
+========== Inventory Management System ==========
+
+1. Add Product
+2. View Products
+3. Search Product
+4. Update Product
+5. Delete Product
+6. Exit
+
+=================================================
+""")
+
+    choice = input("Enter Your Choice: ")
+
+    if choice == "1":
+        add_product()
+
+    elif choice == "2":
+        view_products()
+
+    elif choice == "3":
+        search_product()
+
+    elif choice == "4":
+        update_product()
+
+    elif choice == "5":
+        delete_product()
+
+    elif choice == "6":
+        print("Thank You!")
+        break
+
+    else:
+        print("Invalid Choice!")
+
+conn.close()
