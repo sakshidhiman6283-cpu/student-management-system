@@ -1,0 +1,86 @@
+class Library:
+    def __init__(self):
+        self.books = {}
+
+    def add_book(self):
+        book_id = input("Enter Book ID: ")
+        title = input("Enter Book Title: ")
+
+        if book_id in self.books:
+            print("Book ID already exists!")
+        else:
+            self.books[book_id] = {
+                "title": title,
+                "issued": False
+            }
+            print("Book Added Successfully!")
+
+    def display_books(self):
+        if not self.books:
+            print("No Books Available!")
+            return
+
+        print("\n------ Library Books ------")
+        for book_id, details in self.books.items():
+            status = "Issued" if details["issued"] else "Available"
+            print(f"ID: {book_id} | Title: {details['title']} | Status: {status}")
+
+    def issue_book(self):
+        book_id = input("Enter Book ID: ")
+
+        if book_id not in self.books:
+            print("Book Not Found!")
+        elif self.books[book_id]["issued"]:
+            print("Book Already Issued!")
+        else:
+            self.books[book_id]["issued"] = True
+            print("Book Issued Successfully!")
+
+    def return_book(self):
+        book_id = input("Enter Book ID: ")
+
+        if book_id not in self.books:
+            print("Book Not Found!")
+        elif not self.books[book_id]["issued"]:
+            print("Book was not issued!")
+        else:
+            self.books[book_id]["issued"] = False
+            print("Book Returned Successfully!")
+
+    def delete_book(self):
+        book_id = input("Enter Book ID: ")
+
+        if book_id in self.books:
+            del self.books[book_id]
+            print("Book Deleted Successfully!")
+        else:
+            print("Book Not Found!")
+
+library = Library()
+
+while True:
+    print("\n===== Library Management System =====")
+    print("1. Add Book")
+    print("2. Display Books")
+    print("3. Issue Book")
+    print("4. Return Book")
+    print("5. Delete Book")
+    print("6. Exit")
+
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        library.add_book()
+    elif choice == "2":
+        library.display_books()
+    elif choice == "3":
+        library.issue_book()
+    elif choice == "4":
+        library.return_book()
+    elif choice == "5":
+        library.delete_book()
+    elif choice == "6":
+        print("Thank You!")
+        break
+    else:
+        print("Invalid Choice!")
